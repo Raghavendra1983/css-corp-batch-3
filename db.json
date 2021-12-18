@@ -12,5 +12,32 @@
       "timeStamp": "12-17-21 12:55",
       "id": 13
     }
+  ],
+  "weather-info": [
+    {
+      "id": 1,
+      "city": "Ahmedabad",
+      "temp": 33
+    },
+    {
+      "city": "bangalore",
+      "temp": 27,
+      "id": 2
+    },
+    {
+      "id": 3,
+      "city": "chennai",
+      "temp": 31
+    },
+    {
+      "id": 4,
+      "city": "delhi",
+      "temp": 40
+    },
+    {
+      "id": 5,
+      "city": "mumbai",
+      "temp": 35
+    }
   ]
 }
