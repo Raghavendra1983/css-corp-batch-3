@@ -15,6 +15,7 @@ export default class Todo extends PureComponent {
     };
 
     this.inputText = createRef();
+    //this.loadTodo('all');
   }
 
   async componentDidMount() {
@@ -76,12 +77,13 @@ export default class Todo extends PureComponent {
       this.setFailStatus({ type, payload: error });
     }
   };
+
   deleteTodo = (item) => {
     this.setState(({ todoList }) => {
       const index = this.state.todoList.indexOf(item);
       return {
-        todoList: [...todoList.slice(0, index), ...todoList.slice(index + 1)]
-      }
+        todoList: [...todoList.slice(0, index), ...todoList.slice(index + 1)],
+      };
     });
   };
 
@@ -173,6 +175,7 @@ export default class Todo extends PureComponent {
   };
 
   render() {
+    console.log("main render");
     const { todoList, filterType, httpStatus } = this.state;
     // O(3logN)
     // O(N)
@@ -181,11 +184,11 @@ export default class Todo extends PureComponent {
     const updateOrDeleteTodoStatus = httpStatus.filter(
       (x) => x.type === 'UPDATE_TODO' || x.type === 'DELETE_TODO',
     );
-
+    console.log(JSON.stringify(httpStatus));
     // const {loadTodoStatus, addTodoStatus,updateOrDeleteTodoStatus } = httpStatus.reduce()
     return (
       <div className="bg-[#FAFAFA] h-screen flex flex-col">
-        <h1 className="text-center my-2 text-lg font-bold">Todo App</h1>
+        <h1 className="my-2 text-lg font-bold">Todo App</h1>
         <Suspense fallback={<h1>Loading...</h1>}>
           <TodoForm
             addTodo={this.addTodo}
@@ -193,10 +196,22 @@ export default class Todo extends PureComponent {
             httpStatus={addTodoStatus}
           />
         </Suspense>
-        {loadTodoStatus?.status === 'REQUEST' && (
-          <h1 className="text-center text-red-500">Loading...</h1>
+        {(loadTodoStatus?.status === 'REQUEST' && (updateOrDeleteTodoStatus?.type === 'UPDATE_TODO' || updateOrDeleteTodoStatus?.type === 'DELETE_TODO')) && (
+
+          <h1 className="text-red-500">Updating...</h1>
+
         )}
-        {loadTodoStatus?.status === 'FAIL' && (
+        {(loadTodoStatus?.status === 'REQUEST' && addTodoStatus?.type === 'ADD_TODO') && (
+
+          <h1 className="text-green-500">Adding...</h1>
+
+        )}
+        {(loadTodoStatus?.status === 'REQUEST' && loadTodoStatus.type === 'LOAD_TODO') && (
+
+          <h1 className="text-black-500">Loading...</h1>
+
+        )}
+        {(loadTodoStatus?.status === 'FAIL' && loadTodoStatus.type === 'LOAD_TODO') && (
           <div className="flex justify-center items-center flex-1, flex-col">
             <h1 className=" text-red-500">{loadTodoStatus.payload.message}</h1>
             <button type="button" onClick={() => this.loadTodo('all')}>
@@ -208,7 +223,7 @@ export default class Todo extends PureComponent {
           {todoList.length > 0 && (
             <Suspense fallback={<h1>Loading...</h1>}>
               <TodoList
-                todoList={todoList}
+                todoList={this.state.todoList}
                 filterType={filterType}
                 toggleComplete={this.toggleComplete}
                 deleteTodo={this.deleteTodo}

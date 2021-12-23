@@ -1,6 +1,21 @@
 {
   "editor.formatOnSave": true,
+  "eslint.validate": [
+    "vue",
+    "html",
+    "javascript",
+    "javascriptreact"
+  ],
+  "eslint.workingDirectories": [
+    "./src",
+    "./public"
+  ],
   "emmet.includeLanguages": {
     "javascript": "javascriptreact"
+  },
+  "vetur.format.defaultFormatterOptions": {
+    "prettier": {
+      "singleQuote": true
+    }
   }
 }
