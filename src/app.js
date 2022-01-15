@@ -1,14 +1,13 @@
 import React, { memo, useContext } from 'react';
-import ThemeContext from './context/themeContext'
+import { ThemeContext } from './context/themeContext'
 
 const App = () => {
-    const { changeTheme, data } = useContext(ThemeContext) || {};
-    console.log(data);
+    const { changeThemeFn, data } = useContext(ThemeContext);
     return (
         <div>
             {data?.light?.isActive && (<h1 className="light">Dark label</h1>)}
             {data?.dark?.isActive && (<h1 className="dark">Light label</h1>)}
-            <button type="button" onClick={changeTheme}></button>
+            <button type="button" className={data.light.isActive ? 'light' : 'dark'} onClick={() => changeThemeFn(data.light.isActive ? 'dark' : 'light')}>changeTheme</button>
         </div>
     );
 }
