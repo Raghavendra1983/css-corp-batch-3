@@ -1,15 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import Wether from './container/Wether';
-import weatherServer from './server';
-import { WeatherProvider } from './context/weatherContext';
+import App from './app';
+import AppWrapper from './AppWrapper';
+import ThemeContext, { ThemeProvider } from './context/themeContext';
+import './root.css';
 
-weatherServer();
 
-ReactDOM.render(
-  <WeatherProvider>
-    <Wether />
-  </WeatherProvider>,
-  document.getElementById('root'),
-);
+ReactDOM.render(<AppWrapper />, document.getElementById('root'));

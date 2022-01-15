@@ -1,0 +1,8 @@
+.dark {
+    background-color: black;
+    color: whitesmoke;
+}
+.light {
+    background-color: whitesmoke;
+    color: black;
+}

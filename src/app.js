@@ -1,25 +1,16 @@
-import React, { Component } from 'react';
+import React, { memo, useContext } from 'react';
+import ThemeContext from './context/themeContext'
 
-class App extends Component {
-  async componentDidMount() {
-    const res = await fetch('https://api.weatherserver.com/weather/cities/ch');
-    const json = await res.json();
-    console.log(json);
-
-    const res1 = await fetch(
-      'https://api.weatherserver.com/weather/current/4887398/F',
-    );
-    const json1 = await res1.json();
-    console.log(json1);
-  }
-
-  render() {
+const App = () => {
+    const { changeTheme, data } = useContext(ThemeContext) || {};
+    console.log(data);
     return (
-      <div className="weather-app">
-        <h1>WeatherWatch</h1>
-      </div>
+        <div>
+            {data?.light?.isActive && (<h1 className="light">Dark label</h1>)}
+            {data?.dark?.isActive && (<h1 className="dark">Light label</h1>)}
+            <button type="button" onClick={changeTheme}></button>
+        </div>
     );
-  }
 }
 
-export default App;
+export default memo(App);
