@@ -48,18 +48,16 @@ export const CityProvider = ({ children }) => {
     }
     const searchCities = (term) => {
         let objArr = CitiesInitialList.cities;
-        let found = 0;
         for (let i = 0; i < objArr.length; i++) {
             let keys = Object.keys(objArr[i]);
             for (let j = 0; j < keys.length; j++) {
-                if (String(objArr[i][keys[j]]).toLowerCase() == term.toLowerCase()) {
+                if (String(objArr[i][keys[j]]).toLowerCase() === term.toLowerCase()) {
                     console.log(objArr[i]);
                     let payload = {
                         cities: [objArr[i]]
                     }
                     dispatcher({ type: 'SET_SEARCH', payload });
-                    found = 1;
-                    break;
+                    return;
                 }
                 else {
                     let payload = {
@@ -67,12 +65,6 @@ export const CityProvider = ({ children }) => {
                     }
                     dispatcher({ type: 'SET_SEARCH', payload })
                 }
-                if (found == 1) {
-                    break;
-                }
-            }
-            if (found == 1) {
-                break;
             }
         }
 
