@@ -1,13 +1,5 @@
-/* eslint-disable react/jsx-filename-extension */
-import * as React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App';
-import './root.css';
+import { Counter } from "./counter";
+import React from "react";
+import ReactDOM from "react-dom";
 
-ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.getElementById('root'),
-);
+ReactDOM.render(<Counter />, document.getElementById('root'))
