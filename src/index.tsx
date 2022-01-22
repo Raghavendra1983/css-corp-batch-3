@@ -1,5 +1,6 @@
-import { Counter } from "./counter";
+
+import { TodoApp } from "./todoPage";
 import React from "react";
 import ReactDOM from "react-dom";
 
-ReactDOM.render(<Counter />, document.getElementById('root'))
+ReactDOM.render(<TodoApp />, document.getElementById('root'))
