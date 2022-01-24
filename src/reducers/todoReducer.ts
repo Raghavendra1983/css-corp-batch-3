@@ -15,7 +15,7 @@ export const Todo: TodoType = {
 }
 
 // An interface for our actions
-interface TodoAction {
+export interface TodoAction {
     type: TodoActionKind,
     payload: string | undefined
 }
