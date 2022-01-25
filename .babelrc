@@ -15,7 +15,9 @@
           "@pages": "./src/Pages",
           "@layout": "./src/Layout",
           "@assets": "./src/assets",
-          "types": "./src/types"
+          "utils": "./src/utils",
+          "types": "./src/types",
+          "context": "./src/context"
         }
       }
     ]
