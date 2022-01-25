@@ -8,18 +8,6 @@ import {
   SelectOptions,
 } from 'types/customTypes';
 
-<<<<<<< HEAD
-let confirmPassword = '';
-let password = '';
-
-enum GenderEnum {
-  male = 'male',
-  female = 'female',
-  other = 'other',
-}
-
-=======
->>>>>>> 572dfe193afbcd7c5053f8c46ef7f92cd9836f6b
 export type RegisterInitValuesType = {
   name: string;
   gender: GenderEnum | '';
