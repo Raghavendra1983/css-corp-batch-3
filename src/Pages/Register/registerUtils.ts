@@ -7,6 +7,9 @@ import {
   SelectOptions,
 } from 'types/customTypes';
 
+let confirmPassword = '';
+let password = '';
+
 enum GenderEnum {
   male = 'male',
   female = 'female',
@@ -75,8 +78,12 @@ export const RegisterFields: FieldsProps<RegisterInitValuesType>[] = [
     autoComplete: 'new-password',
     placeholder: 'Password',
     validate: (value: string) => {
+      password = value;
       if (!value) {
         return 'required...';
+      }
+      if (confirmPassword && value !== confirmPassword) {
+        return 'password and confirm password do not match';
       }
     },
   },
@@ -87,8 +94,12 @@ export const RegisterFields: FieldsProps<RegisterInitValuesType>[] = [
     autoComplete: 'new-password',
     placeholder: 'Confirm Password',
     validate: (value: string) => {
+      confirmPassword = value;
       if (!value) {
         return 'required...';
+      }
+      if (value !== password) {
+        return 'password and confirm password do not match';
       }
     },
     isLast: true,
