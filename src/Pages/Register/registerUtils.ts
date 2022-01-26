@@ -8,6 +8,9 @@ import {
   SelectOptions,
 } from 'types/customTypes';
 
+let password = '';
+let confirmPassword = '';
+
 export type RegisterInitValuesType = {
   name: string;
   gender: GenderEnum | '';
