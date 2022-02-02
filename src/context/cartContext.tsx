@@ -1,6 +1,7 @@
 import useError from 'hooks/useError';
 import React, { createContext, useCallback, useMemo, useReducer } from 'react';
 import productReducer, { productInitialState } from 'reducers/productReducer';
+import rootReducer, { rootInitialState } from 'reducers/rootReducer';
 import { CartType } from 'types/cartTypes';
 import { ProviderType } from 'types/customTypes';
 import { ProductType } from 'types/productsTypes';
@@ -9,12 +10,14 @@ import axiosInstance from 'utils/axios';
 type CartProviderValue = {
   cart?: CartType[];
   products?: ProductType[];
-  loading: boolean;
+  loading: any;
+  error: any;
   handleCart: (productId: number) => Promise<void>;
   loadData: () => Promise<void>;
   updateCart: (cartItem: CartType) => void;
   deleteCartItem: (cartItem: CartType) => void;
   updateCartItem: (cartItem: CartType) => void;
+  clearError: (key: string) => void;
 };
 
 export const CartContext = createContext<CartProviderValue>(
@@ -22,13 +25,15 @@ export const CartContext = createContext<CartProviderValue>(
 );
 
 export const CartProvider = ({ children }: ProviderType) => {
-  const [{ cart, products, loading }, dispatch] = useReducer(
-    productReducer,
-    productInitialState,
-  );
+  const [
+    {
+      product: { cart, products },
+      loading,
+      error,
+    },
+    dispatch,
+  ] = useReducer(rootReducer, rootInitialState);
   const handleError = useError();
-
-  console.log('loading', loading);
 
   const loadData = useCallback(async () => {
     try {
@@ -49,17 +54,18 @@ export const CartProvider = ({ children }: ProviderType) => {
       });
     } catch (error) {
       const message = handleError(error);
-      console.log(message);
+      dispatch({
+        type: 'LOAD_PRODUCTS_FAIL',
+        error: message,
+      });
     }
   }, []);
 
   const handleCart = useCallback(async (productId) => {
     try {
-      console.log(productId);
-
       dispatch({
         type: 'ADD_CART_ITEM_REQUEST',
-        id: productId,
+        processId: productId,
       });
       const res = await axiosInstance.post<CartType>('660/cart', {
         productId,
@@ -68,10 +74,18 @@ export const CartProvider = ({ children }: ProviderType) => {
       dispatch({
         type: 'ADD_CART_ITEM_SUCCESS',
         cartItem: res.data,
+        processId: productId,
       });
       // setCart((val) => [...val, res.data]);
     } catch (error) {
-      handleError(error);
+      const message = handleError(error);
+      console.log(message);
+
+      dispatch({
+        type: 'ADD_CART_ITEM_FAIL',
+        processId: productId,
+        error: message,
+      });
     }
   }, []);
 
@@ -79,15 +93,21 @@ export const CartProvider = ({ children }: ProviderType) => {
     try {
       dispatch({
         type: 'DELETE_CART_ITEM_REQUEST',
-        id: cartItem.productId,
+        processId: cartItem.productId,
       });
       await axiosInstance.delete(`660/cart/${cartItem.id}`);
       dispatch({
         type: 'DELETE_CART_ITEM_SUCCESS',
         cartItem,
+        processId: cartItem.productId,
       });
     } catch (error) {
-      handleError(error);
+      const message = handleError(error);
+      dispatch({
+        type: 'DELETE_CART_ITEM_FAIL',
+        processId: cartItem.productId,
+        error: message,
+      });
     }
   }, []);
 
@@ -95,7 +115,7 @@ export const CartProvider = ({ children }: ProviderType) => {
     try {
       dispatch({
         type: 'UPDATE_CART_ITEM_REQUEST',
-        id: cartItem.productId,
+        processId: cartItem.productId,
       });
       const res = await axiosInstance.put<CartType>(
         `660/cart/${cartItem.id}`,
@@ -104,10 +124,24 @@ export const CartProvider = ({ children }: ProviderType) => {
       dispatch({
         type: 'UPDATE_CART_ITEM_SUCCESS',
         cartItem: res.data,
+        processId: cartItem.productId,
       });
     } catch (error) {
-      handleError(error);
+      const message = handleError(error);
+      dispatch({
+        type: 'UPDATE_CART_ITEM_FAIL',
+        processId: cartItem.productId,
+        error: message,
+      });
     }
+  }, []);
+
+  const clearError = useCallback((key: string) => {
+    dispatch({
+      type: 'CLEAR_ERROR',
+      key: key,
+      error: '',
+    });
   }, []);
 
   const updateCart = useCallback(
@@ -131,6 +165,8 @@ export const CartProvider = ({ children }: ProviderType) => {
       updateCartItem,
       deleteCartItem,
       loading,
+      error,
+      clearError,
     }),
     [
       cart,
@@ -141,6 +177,8 @@ export const CartProvider = ({ children }: ProviderType) => {
       loading,
       updateCartItem,
       deleteCartItem,
+      error,
+      clearError,
     ],
   );
 

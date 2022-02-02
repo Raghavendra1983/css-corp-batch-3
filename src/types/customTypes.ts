@@ -30,9 +30,10 @@ export type ProviderType = {
 
 export type LoadingType = {
   type: string;
-  id: number;
+  processId?: number;
 };
 
 export type ErrorType = {
-  error: Error;
+  error: string;
+  key?: string;
 } & LoadingType;
