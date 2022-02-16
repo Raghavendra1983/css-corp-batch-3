@@ -1,27 +1,33 @@
 import Product from '@components/Product';
+import { useRootStore } from 'context/rootStoreContext';
+import { observer } from 'mobx-react';
 import React, { memo, useEffect } from 'react';
+import { LoadRequestActionType } from 'reducers/actionTypes';
+import { LoadingType } from 'types/customTypes';
 import { ProductType } from 'types/productsTypes';
 
+/*
 type Props = {
   products: ProductType[];
   loadProducts: () => void;
   loadCart: () => void;
   loading: any;
-};
+};*/
 
-const Home = ({ products, loadProducts, loadCart, loading }: Props) => {
+const Home = () => {
+  const { productStore, loadingStore } = useRootStore();
+  let products: ProductType[] | void = [];
+
   useEffect(() => {
-    loadProducts();
-    loadCart();
-  }, [loadProducts, loadCart]);
+    productStore.getProducts().then(result => {
+      console.log(result);
+      products = result
+    });
+  }, []);
 
   return (
     <div className="relative">
-      {loading['LOAD_PRODUCTS'] && (
-        <div className="flex justify-center items-center text-white text-4xl w-screen h-screen bg-gray-400 absolute z-10 opacity-30">
-          Loading...
-        </div>
-      )}
+
       {products?.map((product) => {
         return <Product key={product.id} {...product} />;
       })}
@@ -29,4 +35,4 @@ const Home = ({ products, loadProducts, loadCart, loading }: Props) => {
   );
 };
 
-export default memo(Home);
+export default observer(Home);

@@ -5,10 +5,13 @@ import {
   LoadCartRequestAction,
   LoadProductRequestAction,
 } from 'reducers/loadingReducer';
+import { useRootStore } from 'context/rootStoreContext';
 
+/*
 const mapStateToProps = (store: RootState) => {
+  const { productStore } = useRootStore();
   return {
-    products: store.products,
+    products: productStore.getProducts(),
     loading: store.loading,
   };
 };
@@ -20,4 +23,5 @@ const mapDispatchToProps = (dispatch: AppDispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);*/
+export default Home;
